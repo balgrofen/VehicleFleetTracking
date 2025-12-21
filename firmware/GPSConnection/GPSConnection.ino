@@ -63,11 +63,13 @@ void setup() {
 }
 
 void loop() {
+  //Serial read
   while (SerialAT.available()) {
     String line = SerialAT.readStringUntil('\n');
     Serial.println("MODEM: " + line);
   }
 
+//serial send
   if (Serial.available()) {
     String cmd = Serial.readStringUntil('\n');
     SerialAT.println(cmd);

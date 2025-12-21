@@ -8,7 +8,7 @@ A TinyGSM a mobiladat kapcsolat létrejöttéhez szükséges. Illetve a modulbó
 https://github.com/vshymanskyy/TinyGSM
 	Jelenlegi verzió:0.12.0
 
-### ArduinoJson
+### ArduinoJson? Vagy szerver oldali feldolgozás?
 A modulokból érkező adatok JSON formában való feldolgozásához szükséges.
 	Jelenlegi verzió: 7.4.2
 

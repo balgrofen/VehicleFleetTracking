@@ -1,5 +1,5 @@
 #define TINY_GSM_MODEM_SIM7600
-#include <TinyGsmClient.h>
+#include <TinyGsmClient.h> 
 
 const int pwr_pin = 4;
 #define MODEM_RX 26
@@ -38,17 +38,23 @@ void setup() {
     Serial.print("."); // Progress dots
   }
 
+
+  // 2. Set GPS to "Stand-alone" mode (Mode 1)
+  Serial.println("Setting GPS to Stand-alone mode");
+  SerialAT.println("AT+CGPS=1,1"); 
+  delay(1000);
+
   // Now that we know it's awake, start GPS
   Serial.println("\nStarting GPS Engine...");
   SerialAT.println("AT+CGPS=1");
   delay(500);
   
-  Serial.println("\nResetting GPS settings...");
+ /* Serial.println("\nResetting GPS settings...");
   
   // 1. Stop GPS first (in case it's already running)
   SerialAT.println("AT+CGPS=0"); 
   delay(1000);
-  
+  */
   // 2. Set GPS to "Stand-alone" mode (Mode 1)
   SerialAT.println("AT+CGPS=1,1"); 
   delay(1000);
@@ -63,6 +69,9 @@ void setup() {
 }
 
 void loop() {
+  SerialAT.println("AT+CGPSINFO"); 
+  delay(10000);
+
   //Serial read
   while (SerialAT.available()) {
     String line = SerialAT.readStringUntil('\n');

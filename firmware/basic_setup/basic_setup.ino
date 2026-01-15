@@ -1,8 +1,8 @@
 #include <utilities.h>
 
 // Your phone number (Use international format: +CountryCodePhoneNumber)
-const char target_phone[] = "+36707777800"; 
-const char sms_message[]  = "Hello from LilyGo SIM7600!";
+const char target_phone[] = "+36707783866"; 
+const char sms_message[]  = "Szia Necsesz <3";
 
 #define SerialMon Serial
 #define SerialAT  Serial1

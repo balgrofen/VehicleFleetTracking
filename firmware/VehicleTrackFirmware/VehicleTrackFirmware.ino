@@ -15,8 +15,8 @@ const char gprsUser[] = "";
 const char gprsPass[] = "";         
 
 // ================= MQTT SETTINGS =================
-const char* broker = "7.tcp.eu.ngrok.io"; 
-const int   port   = 11168;            
+const char* broker = "10.tcp.eu.ngrok.io"; 
+const int   port   = 23295;            
 const char* topic  = "esp32/location"; 
 
 // ================= OBJECTS =================

@@ -9,6 +9,7 @@
 #define MODEM_RX      26
 #define MODEM_PWRKEY  4
 #define MODEM_FLIGHT  25 
+#define LED_PIN 12
 
 const char apn[]      = "internet.vodafone.net"; 
 const char gprsUser[] = "";         
@@ -30,6 +31,7 @@ float lat, lon, speed, alt, accuracy;
 int   vsat, usat, year, month, day, hour, minute, sec;
 
 void setup() {
+  pinMode(LED_PIN, OUTPUT);
   Serial.begin(115200);
   delay(10);
 
@@ -71,7 +73,11 @@ void setup() {
 }
 
 void loop() {
-  if (!mqtt.connected()) reconnect();
+  if (!mqtt.connected()) {
+    reconnect();
+  } else {
+    digitalWrite(LED_PIN, HIGH); // Ensure it stays ON while connected
+  }
   mqtt.loop();
   
   static unsigned long lastMsg = 0;
@@ -104,6 +110,13 @@ void loop() {
 void reconnect() {
   while (!mqtt.connected()) {
     Serial.print("Connecting to MQTT...");
+    //blinking... connection in progress
+    digitalWrite(LED_PIN, HIGH);
+    delay(250); 
+    digitalWrite(LED_PIN, LOW);
+    delay(250);
+
+
     String clientId = "ESP32-" + String(random(0xffff), HEX);
     if (mqtt.connect(clientId.c_str())) {
       Serial.println("Connected!");

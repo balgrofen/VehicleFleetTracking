@@ -4,6 +4,8 @@
 #include <TinyGsmClient.h>
 #include <PubSubClient.h>
 
+#define LICENSEPLATE_NO "ABC-123"
+
 // ================= PINS & CREDENTIALS =================
 #define MODEM_TX      27
 #define MODEM_RX      26
@@ -94,7 +96,7 @@ void loop() {
         
         // SIMPLE FORMAT: "lat,lon" (e.g. "45.1234,19.1234")
         //String payload = String(lat, 6) + "," + String(lon, 6);
-        String payload = String(lat, 6) + "," + String(lon, 6) + "," + String(speed) + "," + String(alt) + "," + String(vsat) + "," + String(usat) + "," + String(accuracy) + "," + String(year) + "," + String(month) + "," + String(day) + "," + String(hour) + "," + String(minute) + "," + String(sec);
+        String payload =String(LICENSEPLATE_NO)+ ","+ String(lat, 6) + "," + String(lon, 6) + "," + String(speed) + "," + String(alt) + "," + String(vsat) + "," + String(usat) + "," + String(accuracy) + "," + String(year) + "," + String(month) + "," + String(day) + "," + String(hour) + "," + String(minute) + "," + String(sec);
         
         Serial.print("Sending: ");
         Serial.println(payload);

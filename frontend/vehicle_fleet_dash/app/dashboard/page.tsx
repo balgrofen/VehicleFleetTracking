@@ -21,7 +21,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import {Card} from "@/components/ui/card"
-import TrackingMap from "@/components/TrackingMap"
 
 
 export default function Page() {

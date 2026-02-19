@@ -1,5 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic"; 
+const TrackingMap = dynamic(() => import("@/components/TrackingMap"), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-muted animate-pulse rounded-m" />, 
+});
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,

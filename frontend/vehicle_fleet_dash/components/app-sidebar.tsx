@@ -35,44 +35,31 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "JárműŐr",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      plan: "Vállalat",
     },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Autó követő",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
-        {
-          title: "History",
+         {
+          title: "Legfrissebb",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Korábbi utak",
           url: "#",
         },
-        {
-          title: "Settings",
-          url: "#",
-        },
+       
       ],
     },
     {
-      title: "Models",
+      title: "Járművek",
       url: "#",
       icon: Bot,
       items: [
@@ -91,67 +78,42 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Dokumentáció",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Bemutatkozás",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Kezdő Lépések",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "WIKI",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "Legfrissebb változtatások",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Beállítások",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "Általános",
           url: "#",
         },
         {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Stílus",
           url: "#",
         },
       ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 }
@@ -164,7 +126,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

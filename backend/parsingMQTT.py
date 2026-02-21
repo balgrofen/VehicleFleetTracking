@@ -11,18 +11,21 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 def save_to_firebase(carplate, data):
+    # Calculate Unix Timestamp in MS
     ts_ms = int(
         datetime.fromisoformat(
             data["timestamp"].replace("Z", "+00:00")
         ).timestamp() * 1000
     )
 
-    db.collection("vehicles") \
-      .document(carplate) \
-      .collection("locations") \
-      .document(str(ts_ms)) \
-      .set(data)
+    # Add necessary fields for the Cloud Function to process
+    data["carplate"] = carplate
+    data["unix_timestamp"] = ts_ms
 
+    # SAVE TO FLAT COLLECTION: locations/{auto_id}
+    # This triggers the Cloud Function
+    db.collection("locations").add(data)
+    
 def parse_payload(payload: str):
     fields = payload.split(",")
     carplate = str(fields[0])

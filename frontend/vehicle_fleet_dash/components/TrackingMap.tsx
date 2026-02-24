@@ -94,8 +94,20 @@ export default function TrackingMap({ tripId }: { tripId: string | null }) {
 
   if (loading) return <Skeleton className="h-[600px] w-full rounded-xl" />;
 
-  const current = points[index] || points[0];
-  const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
+  if (loading || !points || points.length === 0) {
+  return (
+    <Card className="flex h-[450px] items-center justify-center bg-muted/20 border-dashed">
+      <div className="text-center space-y-2">
+        <p className="text-sm text-muted-foreground animate-pulse">
+          {loading ? "Fetching coordinates..." : "No GPS data found for this trip."}
+        </p>
+      </div>
+    </Card>
+  );
+}
+
+const current = points[index];
+const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
 
   return (
     <Card className="overflow-hidden border-none shadow-none lg:border lg:shadow-sm">

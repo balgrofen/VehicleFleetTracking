@@ -75,7 +75,7 @@ export default function TrackingMap({ tripId }: { tripId: string | null }) {
     // 1. We query WITHOUT the orderBy initially to bypass index latency
     // and verify the connection is actually working.
     const q = query(
-      collection(db, "location"),
+      collection(db, "locations"),
       where("tripId", "==", tripId)
     );
 

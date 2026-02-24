@@ -72,7 +72,7 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Select Plate" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" className="z-[9999]">
                 {vehicles.map(plate => (
                   <SelectItem key={plate} value={plate}>{plate}</SelectItem>
                 ))}
@@ -90,7 +90,7 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
                   {date ? format(date, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0 z-[9999]" align="start">
                 <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
               </PopoverContent>
             </Popover>

@@ -163,7 +163,7 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
             zoom={40} 
             className="h-full w-full"
             zoomControl={false} // Clean look
-            style={{ height: "100%", width: "100%" }}
+            
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <Polyline positions={polylinePath} pathOptions={{ color: '#3b82f6',weight: 5, opacity: 0.8, lineJoin: 'round' }} />
@@ -188,7 +188,7 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
               <Separator />
               <div className="flex items-center justify-between">
                 <Timer className="h-4 w-4 text-emerald-500" />
-                <span className="text-[10px] font-medium uppercase text-muted-foreground">Point {index + 1}</span>
+                <span className="text-sm font-bold">{current.timestamp} <span className="text-[10px] font-normal text-muted-foreground"></span></span>
               </div>
             </CardContent>
           </Card>

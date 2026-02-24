@@ -1,11 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { db } from '../lib/firebase';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+
+// Shadcn UI Components
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { Gauge, Mountain, Timer, MapPin } from "lucide-react";
 
 // Fix for Leaflet marker icons in Next.js
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -42,110 +50,125 @@ interface VehicleLocation {
   altitude: number;
   accuracy: number;
   timestamp: string;
+  tripId: string;
 }
 
-interface TrackingMapProps {
-  carPlate: string;
-}
-
-// Sub-component to pan the map automatically
 function MapController({ center }: { center: [number, number] }) {
   const map = useMap();
-  useEffect(() => {
-    map.panTo(center);
-  }, [center, map]);
+  useEffect(() => { map.panTo(center); }, [center, map]);
   return null;
 }
 
-export default function TrackingMap({ carPlate }: TrackingMapProps) {
+export default function TrackingMap({ tripId }: { tripId: string | null }) {
   const [points, setPoints] = useState<VehicleLocation[]>([]);
   const [index, setIndex] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const loadData = async () => {
-      const q = query(
-        collection(db, "vehicles", carPlate, "locations"), 
-        orderBy("timestamp", "asc")
-      );
-      
-      const snap = await getDocs(q);
-      const data = snap.docs.map(doc => doc.data() as VehicleLocation);
-      setPoints(data);
+    const loadTripData = async () => {
+      if (!tripId) return;
+      setLoading(true);
+      try {
+        const q = query(
+          collection(db, "location"),
+          where("tripId", "==", tripId),
+          orderBy("unix_timestamp", "asc")
+        );
+        const snap = await getDocs(q);
+        const data = snap.docs.map(doc => doc.data() as VehicleLocation);
+        setPoints(data);
+        setIndex(0);
+      } catch (e) { console.error(e); } finally { setLoading(false); }
     };
+    loadTripData();
+  }, [tripId]);
 
-    if (carPlate) loadData();
-  }, [carPlate]);
-
-  if (points.length === 0) {
-    return <div className="flex h-screen items-center justify-center bg-slate-900 text-white">Loading path...</div>;
+  if (!tripId) {
+    return (
+      <Card className="flex h-[600px] flex-col items-center justify-center border-dashed">
+        <MapPin className="h-10 w-10 text-muted-foreground/40 mb-4" />
+        <p className="text-muted-foreground">Select a trip from the list to view the route</p>
+      </Card>
+    );
   }
 
-  const current = points[index];
+  if (loading) return <Skeleton className="h-[600px] w-full rounded-xl" />;
+
+  const current = points[index] || points[0];
   const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
 
   return (
-    <div className="flex flex-col h-screen bg-slate-900 text-white font-sans">
-      {/* Map Header */}
-      <div className="p-4 bg-slate-800 flex justify-between items-center shadow-md">
-        <h1 className="text-xl font-bold tracking-tight">Fleet Tracker: <span className="text-blue-400">{carPlate}</span></h1>
-        <div className="text-right">
-          <p className="text-xs text-slate-400 uppercase tracking-widest">Last Update</p>
-          <p className="text-sm font-mono">{new Date(current.timestamp).toLocaleTimeString()}</p>
+    <Card className="overflow-hidden border-none shadow-none lg:border lg:shadow-sm">
+      <CardHeader className="border-b bg-muted/30 pb-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <CardTitle className="text-sm font-medium leading-none">Trip Playback</CardTitle>
+            <CardDescription className="text-xs font-mono">{tripId}</CardDescription>
+          </div>
+          <Badge variant="outline" className="font-mono uppercase">
+            {new Date(current.timestamp).toLocaleTimeString()}
+          </Badge>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Main Map Area */}
-      <div className="flex-1 relative">
-        <MapContainer 
-          center={[current.lat, current.lon]} 
-          zoom={16} 
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={polylinePath} color="#3b82f6" weight={4} opacity={0.6} />
-          <Marker position={[current.lat, current.lon]} />
-          <MapController center={[current.lat, current.lon]} />
-        </MapContainer>
-
-        {/* Floating Data Card */}
-        <div className="absolute bottom-10 right-6 z-[1000] bg-slate-900/90 backdrop-blur-md p-5 rounded-2xl shadow-2xl border border-slate-700 w-64">
-           <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-[10px] text-slate-400 uppercase">Speed</p>
-                <p className="text-lg font-bold">{current.speed} <span className="text-sm font-normal text-slate-500">km/h</span></p>
-              </div>
-              <div>
-                <p className="text-[10px] text-slate-400 uppercase">Altitude</p>
-                <p className="text-lg font-bold">{current.altitude} <span className="text-sm font-normal text-slate-500">m</span></p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-[10px] text-slate-400 uppercase">Accuracy</p>
-                <p className="text-sm font-medium text-blue-300">{current.accuracy.toFixed(2)} HDOP</p>
-              </div>
-           </div>
+      <CardContent className="p-0 relative">
+        {/* Leaflet Map */}
+        <div className="h-[450px] w-full z-0">
+          <MapContainer 
+            center={[current.lat, current.lon]} 
+            zoom={15} 
+            className="h-full w-full"
+            zoomControl={false} // Clean look
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Polyline positions={polylinePath} color="hsl(var(--primary))" weight={4} opacity={0.7} />
+            <Marker position={[current.lat, current.lon]} />
+            <MapController center={[current.lat, current.lon]} />
+          </MapContainer>
         </div>
-      </div>
 
-      {/* Bottom Slider Control */}
-      <div className="p-8 bg-slate-900 border-t border-slate-800">
-        <div className="max-w-4xl mx-auto">
-            <input 
-              type="range"
-              min="0"
-              max={points.length - 1}
-              value={index}
-              onChange={(e) => setIndex(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all"
-            />
-            <div className="flex justify-between mt-4 text-[10px] font-bold text-slate-500 tracking-tighter uppercase">
-              <span>Start Trip</span>
-              <span className="text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full text-xs">
-                {index + 1} / {points.length} Points
+        {/* Floating Telemetry Overlay (Shadcn Style) */}
+        <div className="absolute bottom-4 right-4 z-[1000] flex flex-col gap-2">
+          <Card className="w-40 shadow-xl backdrop-blur-md bg-background/95">
+            <CardContent className="p-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <Gauge className="h-4 w-4 text-blue-500" />
+                <span className="text-sm font-bold">{current.speed.toFixed(1)} <span className="text-[10px] font-normal text-muted-foreground">km/h</span></span>
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <Mountain className="h-4 w-4 text-orange-500" />
+                <span className="text-sm font-bold">{current.altitude.toFixed(0)} <span className="text-[10px] font-normal text-muted-foreground">m</span></span>
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <Timer className="h-4 w-4 text-emerald-500" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">Point {index + 1}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Playback Controls Footer */}
+        <div className="p-6 bg-card border-t">
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center justify-between text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <span>Departure</span>
+              <span className="text-primary bg-primary/10 px-2 py-0.5 rounded text-[10px]">
+                Progress: {Math.round(((index + 1) / points.length) * 100)}%
               </span>
-              <span>End Trip</span>
+              <span>Arrival</span>
             </div>
+            <Slider
+              value={[index]}
+              max={points.length - 1}
+              step={1}
+              onValueChange={(val) => setIndex(val[0])}
+              className="py-4"
+            />
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

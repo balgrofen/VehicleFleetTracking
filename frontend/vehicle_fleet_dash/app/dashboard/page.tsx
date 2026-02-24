@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import * as React from "react"
 import dynamic from "next/dynamic"; 
 const TrackingMap = dynamic(() => import("@/components/TrackingMap"), {
   ssr: false,
@@ -21,9 +22,15 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import {Card} from "@/components/ui/card"
+import TripFinder from "@/components/tripfinder"
+
+interface TrackingMapProps {
+  tripId: string | null; // The component now expects 'tripId'
+}
 
 
 export default function Page() {
+  const [activeTripId, setActiveTripId] = React.useState<string | null>(null);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -44,7 +51,7 @@ export default function Page() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>Korábbi adatok</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -54,11 +61,11 @@ export default function Page() {
           <div className="grid auto-rows-min gap-4 md:grid-cols-2">
           <div className="bg-muted/50 aspect-video rounded-m">
             <Card>
-              <TrackingMap carPlate="ABC-123" />
+              <TrackingMap tripId={activeTripId} />
             </Card>
             </div>
           <div className="grid auto-rows-min gap-4 md:grid-cols-2 md:grid-rows-2">
-            <div className="bg-muted/50 aspect-video rounded-xl" />
+            <div className="bg-muted/50 aspect-video rounded-xl"><TripFinder onSelectTrip={setActiveTripId}/></div>
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />

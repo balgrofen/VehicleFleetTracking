@@ -24,13 +24,27 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
   const [loading, setLoading] = React.useState(false)
 
   // 1. Fetch available license plates on mount
-  React.useEffect(() => {
-    const fetchVehicles = async () => {
-      const snapshot = await getDocs(collection(db, "vehicles"))
-      setVehicles(snapshot.docs.map(doc => doc.id)) // Assuming ID is the plate
+   React.useEffect(() => {
+  const fetchVehicles = async () => {
+    try {
+      console.log("Fetching from collection: vehicles...");
+      const snapshot = await getDocs(collection(db, "vehicles"));
+      
+      if (snapshot.empty) {
+        console.warn("No documents found in 'vehicles' collection.");
+        return;
+      }
+
+      const plates = snapshot.docs.map(doc => doc.id);
+      console.log("Found plates:", plates);
+      setVehicles(plates);
+    } catch (error) {
+      // This will tell you if it's a permission error or a config error
+      console.error("Failed to fetch vehicles:", error);
     }
-    fetchVehicles()
-  }, [])
+  };
+  fetchVehicles();
+}, []);
 
   // 2. Query Trips based on filters
   const handleSearch = async () => {

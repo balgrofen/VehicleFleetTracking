@@ -155,14 +155,15 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
         </div>
       </CardHeader>
 
-      <CardContent className="p-0 relative">
+      <CardContent className="p-0 relative flex-1 flex flex-col">
         {/* Leaflet Map */}
-        <div className="h-[450px] w-full z-0">
+        <div className="flex-1 w-full z-0 min-h-[400px]">
           <MapContainer 
             center={[current.lat, current.lon]} 
-            zoom={15} 
+            zoom={40} 
             className="h-full w-full"
             zoomControl={false} // Clean look
+            style={{ height: "100%", width: "100%" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <Polyline positions={polylinePath} pathOptions={{ color: '#3b82f6',weight: 5, opacity: 0.8, lineJoin: 'round' }} />

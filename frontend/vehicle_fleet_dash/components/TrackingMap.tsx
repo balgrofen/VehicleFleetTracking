@@ -44,13 +44,15 @@ L.Icon.Default.mergeOptions({
 });
 
 interface VehicleLocation {
-  lat: number;
-  lon: number;
-  speed: number;
-  altitude: number;
-  accuracy: number;
-  timestamp: string;
-  tripId: string;
+  accuracy: number;       // number
+  altitude: number;       // number
+  carplate: string;       // string
+  lat: number;            // number
+  lon: number;            // number
+  speed: number;          // number
+  timestamp: string;      // string (ISO format)
+  tripId: string;         // string
+  unix_timestamp: number; // number
 }
 
 function MapController({ center }: { center: [number, number] }) {
@@ -66,20 +68,50 @@ export default function TrackingMap({ tripId }: { tripId: string | null }) {
 
   useEffect(() => {
     const loadTripData = async () => {
-      if (!tripId) return;
-      setLoading(true);
-      try {
-        const q = query(
-          collection(db, "location"),
-          where("tripId", "==", tripId),
-          orderBy("unix_timestamp", "asc")
-        );
-        const snap = await getDocs(q);
-        const data = snap.docs.map(doc => doc.data() as VehicleLocation);
-        setPoints(data);
-        setIndex(0);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
-    };
+  if (!tripId) return;
+  setLoading(true);
+  
+  try {
+    // 1. We query WITHOUT the orderBy initially to bypass index latency
+    // and verify the connection is actually working.
+    const q = query(
+      collection(db, "location"),
+      where("tripId", "==", tripId)
+    );
+
+    const snap = await getDocs(q);
+    
+    if (snap.empty) {
+      console.warn(`No docs found for ID: ${tripId}. Check if field is 'tripId' or 'tripid'`);
+      setPoints([]);
+      return;
+    }
+
+    // 2. Map the data and fix potential type issues
+// Inside your TrackingMap loadTripData function
+const data = snap.docs.map(doc => {
+  const d = doc.data();
+  return {
+    ...d, // This pulls in speed, altitude, accuracy, timestamp, and tripId
+    lat: Number(d.lat),
+    lon: Number(d.lon),
+    unix_timestamp: Number(d.unix_timestamp)
+  } as VehicleLocation; // TypeScript is now happy because all fields are present
+});
+
+    // 3. Manual Sort (Browser-side) 
+    // This ensures your map works even if the Firestore index is still propagating
+    const sortedData = data.sort((a, b) => a.unix_timestamp - b.unix_timestamp);
+    
+    setPoints(sortedData);
+    setIndex(0); 
+
+  } catch (error) {
+    console.error("Firestore Map Error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
     loadTripData();
   }, [tripId]);
 

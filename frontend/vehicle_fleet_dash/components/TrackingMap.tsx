@@ -165,7 +165,7 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
             zoomControl={false} // Clean look
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Polyline positions={polylinePath} color="hsl(var(--primary))" weight={4} opacity={0.7} />
+            <Polyline positions={polylinePath} pathOptions={{ color: '#3b82f6',weight: 5, opacity: 0.8, lineJoin: 'round' }} />
             <Marker position={[current.lat, current.lon]} />
             <MapController center={[current.lat, current.lon]} />
           </MapContainer>

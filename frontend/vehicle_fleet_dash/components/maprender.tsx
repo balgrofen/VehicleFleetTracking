@@ -2,15 +2,22 @@
 
 import dynamic from 'next/dynamic';
 
+// We define what props this dynamic component accepts
 const TrackingMap = dynamic(() => import('../components/TrackingMap'), { 
   ssr: false,
-  loading: () => <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Loading Map Engine...</div>
+  loading: () => (
+    <div className="h-[600px] w-full bg-slate-900 rounded-xl flex items-center justify-center text-white border border-slate-800 animate-pulse">
+      Loading Map Engine...
+    </div>
+  )
 });
 
-export default function RenderMap() {
+// Add the prop here so the Dashboard can talk to it
+export default function RenderMap({ tripId }: { tripId: string | null }) {
   return (
-    <main>
-      <TrackingMap carPlate="ABC-123" />
-    </main>
+    <div className="w-full h-full">
+      {/* Pass the tripId down to the dynamic TrackingMap */}
+      <TrackingMap tripId={tripId} />
+    </div>
   );
 }

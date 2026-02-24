@@ -23,6 +23,11 @@ import {
 } from "@/components/ui/sidebar"
 import {Card} from "@/components/ui/card"
 import TripFinder from "@/components/tripfinder"
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 
 interface TrackingMapProps {
   tripId: string | null; // The component now expects 'tripId'
@@ -57,21 +62,11 @@ export default function Page() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-          <div className="bg-muted/50 aspect-video rounded-m">
-            <Card>
-              <TrackingMap tripId={activeTripId} />
-            </Card>
-            </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2 md:grid-rows-2">
-            <div className="bg-muted/50 aspect-video rounded-xl"><TripFinder onSelectTrip={setActiveTripId}/></div>
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-          </div>
-        </div>
-        </div>
+        <ResizablePanelGroup orientation="horizontal">
+          <ResizablePanel defaultSize="75%"><TrackingMap tripId={activeTripId} /></ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize="25%"><TripFinder onSelectTrip={setActiveTripId}/></ResizablePanel>
+          </ResizablePanelGroup>
       </SidebarInset>
     </SidebarProvider>
   )

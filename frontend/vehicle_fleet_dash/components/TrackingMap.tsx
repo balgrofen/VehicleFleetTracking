@@ -142,7 +142,7 @@ const current = points[index];
 const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
 
   return (
-    <Card className="overflow-hidden border-none shadow-none lg:border lg:shadow-sm">
+    <Card className="overflow-hidden border-none shadow-none lg:border lg:shadow-sm flex flex-col h-full">
       <CardHeader className="border-b bg-muted/30 pb-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">

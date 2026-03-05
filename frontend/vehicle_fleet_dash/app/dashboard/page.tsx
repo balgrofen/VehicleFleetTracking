@@ -28,6 +28,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface TrackingMapProps {
   tripId: string | null; // The component now expects 'tripId'
@@ -36,6 +38,15 @@ interface TrackingMapProps {
 
 export default function Page() {
   const [activeTripId, setActiveTripId] = React.useState<string | null>(null);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login"); // Ha nincs user, irány a login oldal
+    }
+  }, [user, loading, router]);
+
   return (
     <SidebarProvider>
       <AppSidebar />

@@ -76,11 +76,11 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <Card>
+      <Card className="w-full max-w-4xl mx-auto">
         <CardHeader><CardTitle>Trip History Finder</CardTitle></CardHeader>
-        <CardContent className="flex flex-wrap gap-4 items-end">
+        <CardContent className="flex flex-col md:flex-row flex-wrap gap-4 items-end">
           {/* License Plate Select */}
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-auto flex-1 min-w-[200px]">
             <label className="text-sm font-medium">Vehicle</label>
             <Select onValueChange={setSelectedPlate}>
               <SelectTrigger className="w-[200px]">
@@ -95,8 +95,8 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
           </div>
 
           {/* Date Picker */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Date</label>
+          <div className="space-y-2 w-full md:w-auto flex-1 min-w-[200px]">
+            <label className="text-sm font-medium">Date</label><br></br>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
@@ -110,7 +110,7 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
             </Popover>
           </div>
 
-          <Button onClick={handleSearch} disabled={loading || !selectedPlate}>
+          <Button onClick={handleSearch} disabled={loading || !selectedPlate} className="w-full md:w-auto">
             <Search className="mr-2 h-4 w-4" /> {loading ? "Searching..." : "Search Trips"}
           </Button>
         </CardContent>
@@ -121,13 +121,19 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
         {trips.length > 0 ? (
           trips.map(trip => (
             <Card key={trip.id} onClick={() => onSelectTrip(trip.id)} className="hover:border-primary transition-colors cursor-pointer">
-              <CardContent className="p-4 flex justify-between items-center">
+              <CardContent className="p-4 flex justify-center items-center gap-8">
                 <div>
-                  <p className="font-bold">{new Date(trip.startTime).toLocaleTimeString()}</p>
-                  <p className="text-sm text-muted-foreground">Status: {trip.status}</p>
+                  <p className="font-medium">Menetidő: {new Date(trip.lastUpdate - trip.startTime).toLocaleTimeString()}</p>
+                  
+                  <p className="text-xs text-muted-foreground">Út kezdete: {new Date(trip.startTime).toLocaleTimeString()}</p>
+                  <p className="text-xs text-muted-foreground">Út vége: {new Date(trip.lastUpdate).toLocaleTimeString()}</p>
+                   
                 </div>
-                <div className="text-right">
-                  <p className="font-medium">{(trip.totalDistance).toFixed(2)} km</p>
+                
+                <div className="h-30 w-[2px] bg-border" />
+
+                <div className="text-left">
+                  <p className="font-medium">Megtett táv: {(trip.totalDistance).toFixed(2)} km</p>
                   <p className="text-xs text-muted-foreground">ID: {trip.id.split('_').pop()}</p>
                 </div>
               </CardContent>

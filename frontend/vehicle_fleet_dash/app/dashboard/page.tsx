@@ -74,9 +74,9 @@ export default function Page() {
           </div>
         </header>
         <ResizablePanelGroup orientation="horizontal">
-          <ResizablePanel defaultSize="75%"><TrackingMap tripId={activeTripId} /></ResizablePanel>
+          <ResizablePanel defaultSize="70%"><TrackingMap tripId={activeTripId} /></ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize="25%"><TripFinder onSelectTrip={setActiveTripId}/></ResizablePanel>
+          <ResizablePanel defaultSize="30%" minSize="25%"><TripFinder onSelectTrip={setActiveTripId}/></ResizablePanel>
           </ResizablePanelGroup>
       </SidebarInset>
     </SidebarProvider>

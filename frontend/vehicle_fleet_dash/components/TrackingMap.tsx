@@ -188,7 +188,7 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
               <Separator />
               <div className="flex items-center justify-between">
                 <Timer className="h-4 w-4 text-emerald-500" />
-                <span className="text-sm font-bold">{current.timestamp.split("T")[1].replace("Z", "")} <span className="text-[10px] font-normal text-muted-foreground"></span></span>
+                <span className="text-sm font-bold">{new Date(current.unix_timestamp).toLocaleTimeString()} <span className="text-[10px] font-normal text-muted-foreground"></span></span>
               </div>
             </CardContent>
           </Card>

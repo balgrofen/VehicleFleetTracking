@@ -42,42 +42,6 @@ const data = {
   ],
   navMain: [
     {
-      title: "Autó követő",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-         {
-          title: "Legfrissebb",
-          url: "#",
-        },
-        {
-          title: "Korábbi utak",
-          url: "#",
-        },
-       
-      ],
-    },
-    {
-      title: "Járművek",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
       title: "Dokumentáció",
       url: "#",
       icon: BookOpen,
@@ -100,21 +64,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "Beállítások",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Általános",
-          url: "#",
-        },
-        {
-          title: "Stílus",
-          url: "#",
-        },
-      ],
-    },
   ],
 }
 
@@ -128,7 +77,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

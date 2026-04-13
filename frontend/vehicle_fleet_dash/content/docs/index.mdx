@@ -1,54 +1,29 @@
 ---
 title: Első lépések
-description: Ismerkedj meg a JárműŐr platform alapjaival
+description: Rövid útmutató a JárműŐr rendszer használatához
 ---
 
-# Üdvözlünk a JárműŐrben! 🚛
+# Üdvözöljük a JárműŐr felületén
 
-Ez az útmutató segít, hogy percek alatt üzembe helyezd a flottakövető rendszeredet. A platform segítségével valós időben követheted járműveid mozgását, optimalizálhatod az útvonalakat és csökkentheted az üzemanyagköltségeket.
+Üdvözöljük a **JárműŐr** flottakövető rendszerében! Ez az útmutató segít Önnek gyorsan eligazodni a felületen.
 
----
+## 1. Navigáció a felületen
+A bal oldali menüsáv segítségével érheti el a rendszer fő funkcióit:
+* **Jármű követés:** Valós idejű és múltbéli adatok megtekintése.
+* **Dokumentáció:** Segédletek és részletes leírások.
 
-## Gyorsindítási folyamat
+## 2. Korábbi útvonal keresése
+Egy adott jármű múltbéli adatainak lekéréséhez kövesse az alábbi lépéseket a jobb oldali **Korábbi út kereső** panelen:
 
-A rendszer teljes körű használatához kövesd az alábbi három egyszerű lépést:
+1.  **Rendszám kiválasztása:** Válassza ki a keresett járművet (pl. `ABC-123`).
+2.  **Dátum megadása:** Válassza ki a kívánt napot.
+3.  **Listázás:** Kattintson az **Útvonal listázása** gombra.
 
-### 1. Eszközök regisztrálása
-Mielőtt látnád a térképen a járműveket, hozzá kell adnod a GPS nyomkövetőket a rendszerhez.
-
-* Navigálj a **Beállítások > Eszközök** menüpontra.
-* Kattints az **"Új eszköz hozzáadása"** gombra.
-* Add meg az eszköz **IMEI számát** és a jármű rendszámát.
-
-### 2. Járművezetők hozzárendelése
-Rendelj sofőröket az eszközeidhez a pontosabb riportálás érdekében.
-
-| Mező | Leírás |
-| :--- | :--- |
-| **Név** | A sofőr teljes neve |
-| **Azonosító** | Digitális tachográf kártya száma |
-| **Csoport** | Pl. "Belföldi fuvarozás" vagy "Futárszolgálat" |
-
-### 3. Értesítések beállítása
-Ne maradj le a fontos eseményekről! Állíts be riasztásokat a következőkre:
-* **Gyorshajtás:** Értesítés, ha a jármű átlépi a megengedett sebességet.
-* **Geofence:** Riasztás, ha a teherautó elhagyja a kijelölt zónát.
-* **Szerviz:** Emlékeztető az olajcserére vagy műszaki vizsgára.
+## 3. Útvonal elemzése
+A keresés után a központi térképen megjelenik a megtett útvonal. A jobb oldali kártyákon láthatja a statisztikákat:
+* **Menetidő:** Az út hossza időben.
+* **Megtett táv:** Távolság kilométerben.
 
 ---
 
-## Hatékonysági mutatók
-
-A rendszer az alábbi alapvető képlet alapján számolja az üzemanyag-hatékonyságot:
-
----
-
-## Következő lépések
-
-Ha végeztél az alapbeállításokkal, érdemes megismerkedned a haladó funkciókkal:
-
-1.  **Riportkészítés:** Automatikus menetlevél generálás minden hétfő reggel.
-2.  **Üzemanyag-szint figyelés:** CAN-bus adatok elemzése a visszaélések kiszűrésére.
-3.  **Karbantartási naptár:** Ütemezett szervizelések kezelése.
-
-> **Megjegyzés:** Az API integrációval kapcsolatos részletes dokumentációt a fejlesztői menüpont alatt találod.
+> **Tipp:** Használja a térkép alatti csúszkát az út időbeli visszajátszásához!

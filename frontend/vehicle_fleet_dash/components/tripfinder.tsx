@@ -23,6 +23,28 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
   const [trips, setTrips] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(false)
 
+  // Inside your TripFinder component
+const [tripDates, setTripDates] = React.useState<Date[]>([])
+
+// Fetch all trip dates for the selected vehicle to "mark" the calendar
+React.useEffect(() => {
+  const fetchTripDates = async () => {
+    if (!selectedPlate) return
+    try {
+      const q = query(
+        collection(db, "trips"),
+        where("carplate", "==", selectedPlate)
+      )
+      const snapshot = await getDocs(q)
+      const dates = snapshot.docs.map(doc => new Date(doc.data().startTime))
+      setTripDates(dates)
+    } catch (e) {
+      console.error("Error fetching trip dates:", e)
+    }
+  }
+  fetchTripDates()
+}, [selectedPlate])
+
   // 1. Fetch available license plates on mount
    React.useEffect(() => {
   const fetchVehicles = async () => {
@@ -77,11 +99,11 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
   return (
     <div className="p-6 space-y-6">
       <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader><CardTitle>Trip History Finder</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Korábbi út kereső</CardTitle></CardHeader>
         <CardContent className="flex flex-col md:flex-row flex-wrap gap-4 items-end">
           {/* License Plate Select */}
           <div className="space-y-2 w-full md:w-auto flex-1 min-w-[200px]">
-            <label className="text-sm font-medium">Vehicle</label>
+            <label className="text-sm font-medium">Rendszám</label>
             <Select onValueChange={setSelectedPlate}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Select Plate" />
@@ -96,22 +118,33 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
 
           {/* Date Picker */}
           <div className="space-y-2 w-full md:w-auto flex-1 min-w-[200px]">
-            <label className="text-sm font-medium">Date</label><br></br>
+            <label className="text-sm font-medium">Dátum</label><br></br>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  {date ? format(date, "PPP") : <span>Válassz dátumot</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 z-[9999]" align="start">
-                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+                modifiers={{
+                booked: tripDates,
+                }}
+                // Pont azok alatt a dátumok alatt ahol van helyadat
+                modifiersClassNames={{
+                booked: "after:block after:mx-auto after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1"
+                }}/>
               </PopoverContent>
             </Popover>
           </div>
 
           <Button onClick={handleSearch} disabled={loading || !selectedPlate} className="w-full md:w-auto">
-            <Search className="mr-2 h-4 w-4" /> {loading ? "Searching..." : "Search Trips"}
+            <Search className="mr-2 h-4 w-4" /> {loading ? "Keresés..." : "Útvonal listázása"}
           </Button>
         </CardContent>
       </Card>
@@ -140,7 +173,7 @@ export default function TripFinder({ onSelectTrip }: TripFinderProps) {
             </Card>
           ))
         ) : (
-          <p className="text-center text-muted-foreground py-10">No trips found for this criteria.</p>
+          <p className="text-center text-muted-foreground py-10">Az kiválaszott rendszámmal és dátummal nem létezik adat.</p>
         )}
       </div>
     </div>

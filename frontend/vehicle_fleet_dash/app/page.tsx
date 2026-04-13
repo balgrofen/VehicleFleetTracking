@@ -18,7 +18,7 @@ export default function LoginPage() {
         </a>
         <LoginForm />
       </div>
-        <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
+       
     </div>
 
   )

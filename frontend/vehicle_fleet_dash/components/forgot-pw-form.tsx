@@ -41,9 +41,9 @@ export function ForgotPasswordForm({className,...props}: React.ComponentProps<"d
     <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">Create your account</CardTitle>
+              <CardTitle className="text-xl">Elfelejtett jelszó</CardTitle>
               <CardDescription>
-                Enter your email below to create your account
+                Add meg a fiókodhoz tartozó email címet
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -54,23 +54,19 @@ export function ForgotPasswordForm({className,...props}: React.ComponentProps<"d
                     <Input
                       id="email"
                       type="email"
-                      placeholder="m@example.com"
+                      placeholder="minta@minta.hu"
                       value={email} 
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </Field>
                   <Field>
-                    <Button type="submit"> email</Button>
+                    <Button type="submit"> Jelszó visszaállító email küldése küldése</Button>
                   </Field>
                 </FieldGroup>
               </form>
             </CardContent>
           </Card>
-          <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-            and <a href="#">Privacy Policy</a>.
-          </FieldDescription>
         </div>
   )
 }

@@ -119,7 +119,7 @@ const data = snap.docs.map(doc => {
     return (
       <Card className="flex h-[600px] flex-col items-center justify-center border-dashed">
         <MapPin className="h-10 w-10 text-muted-foreground/40 mb-4" />
-        <p className="text-muted-foreground">Select a trip from the list to view the route</p>
+        <p className="text-muted-foreground">Válassz ki egy utat az út megtekintéséhez</p>
       </Card>
     );
   }
@@ -146,7 +146,7 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
       <CardHeader className="border-b bg-muted/30 pb-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-sm font-medium leading-none">Trip Playback</CardTitle>
+            <CardTitle className="text-sm font-medium leading-none">Út visszajátszása</CardTitle>
             <CardDescription className="text-xs font-mono">{tripId}</CardDescription>
           </div>
           <Badge variant="outline" className="font-mono uppercase">
@@ -198,11 +198,11 @@ const polylinePath: [number, number][] = points.map(p => [p.lat, p.lon]);
         <div className="p-6 bg-card border-t">
           <div className="flex flex-col space-y-4">
             <div className="flex items-center justify-between text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              <span>Departure</span>
+              <span>Indulás</span>
               <span className="text-primary bg-primary/10 px-2 py-0.5 rounded text-[10px]">
-                Progress: {Math.round(((index + 1) / points.length) * 100)}%
+                Előrehaladás: {Math.round(((index + 1) / points.length) * 100)}%
               </span>
-              <span>Arrival</span>
+              <span>Érkezés</span>
             </div>
             <Slider
               value={[index]}

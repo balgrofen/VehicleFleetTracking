@@ -12,6 +12,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Car
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -25,6 +26,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { source } from "@/lib/source";
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // 1. Get the page tree from Fumadocs
@@ -55,7 +57,7 @@ console.log('tree:', JSON.stringify(tree, null, 2));
     teams: [
       {
         name: "JárműŐr",
-        logo: GalleryVerticalEnd,
+        logo: Car,
         plan: "Vállalat",
       },
     ],
@@ -65,9 +67,9 @@ console.log('tree:', JSON.stringify(tree, null, 2));
         url: "/docs",
         icon: BookOpen,
         isActive: true,
-        items: docItems, // <--- This is now dynamic
+        items: docItems, 
       },
-      // You can add other static sections here if needed
+      
     ],
   };
 
@@ -80,7 +82,7 @@ console.log('tree:', JSON.stringify(tree, null, 2));
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        {/* Add NavUser here if you have the user data */}
+        <NavUser/>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

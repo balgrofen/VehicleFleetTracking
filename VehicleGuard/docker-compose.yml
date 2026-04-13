@@ -1,0 +1,68 @@
+version: '3.8'
+services:
+
+  # MQTT Bróker
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt_broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+
+  # Python GPS feldolgozó
+  gps-parser:
+    image: mqtt-parser:latest
+    container_name: gps_parser
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./config/firebase-auth.json:/app/firebase-auth.json:ro
+    env_file:
+      - .env
+    restart: always
+
+  # Next.js webalkalmazás
+  nextjs:
+    image: vehicle-webapp:latest
+    container_name: gps_web_gui
+    expose:
+      - "3000"
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx fordított proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      nextjs:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Ngrok átjáró
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_gateway
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTH_TOKEN}
+    command:
+      - "tcp"
+      - "mosquitto:1883"
+    depends_on:
+      - mosquitto
+    restart: unless-stopped

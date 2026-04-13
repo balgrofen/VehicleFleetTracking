@@ -78,9 +78,9 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
+          <CardTitle className="text-xl">Hozd létre a fiókod</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Add meg az email címed hogy elkészítsük a fiókod
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -91,7 +91,7 @@ export function SignupForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="minta@minta.hu"
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -100,34 +100,30 @@ export function SignupForm({
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <FieldLabel htmlFor="password">Jelszó</FieldLabel>
                     <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="confirm-password">
-                      Confirm Password
+                      Jelszó ismétlése
                     </FieldLabel>
                     <Input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required  />
                   </Field>
                 </Field>
                 <FieldDescription>
-                  Must be at least 8 characters long.
+                  A jelszónak legalább 8 karakter hosszúnak kell lennie
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">Fiók létrehozása</Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <a href="#" onClick={() => router.push("/login")}>Sign in</a>
+                  Van már fiókod? <a href="#" onClick={() => router.push("/login")}>Jelentkezz be</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
     </div>
   )
 }
